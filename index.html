@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bicycle Chain Length Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #footer {
+        text-align: center;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: hsl(80, 13%, 95%);
+        border-top: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      <h1 class="text-2xl font-bold mb-6 text-center">
+        Bicycle Chain Length Calculator
+      </h1>
+
+      <!-- Single-Speed Form -->
+      <div class="mb-8">
+        <h2 class="text-lg font-semibold mb-4">Single-Speed Bike</h2>
+        <div class="mb-4">
+          <label
+            for="single-chainstay"
+            class="block text-sm font-medium text-gray-700"
+            >Chainstay Length (mm):</label
+          >
+          <input
+            type="number"
+            id="single-chainstay"
+            step="0.1"
+            min="0"
+            class="mt-1 p-2 w-full border rounded-md"
+            placeholder="e.g., 419.1"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            for="single-chainring"
+            class="block text-sm font-medium text-gray-700"
+            >Chain Wheel Teeth:</label
+          >
+          <input
+            type="number"
+            id="single-chainring"
+            min="0"
+            class="mt-1 p-2 w-full border rounded-md"
+            placeholder="e.g., 48"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            for="single-sprocket"
+            class="block text-sm font-medium text-gray-700"
+            >Sprocket Teeth(Freewheel):</label
+          >
+          <input
+            type="number"
+            id="single-sprocket"
+            min="0"
+            class="mt-1 p-2 w-full border rounded-md"
+            placeholder="e.g., 16"
+          />
+        </div>
+        <button
+          onclick="calculateSingleSpeed()"
+          class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
+        >
+          Calculate
+        </button>
+        <p id="single-result" class="mt-4 text-center text-gray-700"></p>
+      </div>
+
+      <!-- Multi-Speed Form -->
+      <div>
+        <h2 class="text-lg font-semibold mb-4">Multi-Speed Bike</h2>
+        <div class="mb-4">
+          <label
+            for="multi-chainstay"
+            class="block text-sm font-medium text-gray-700"
+            >Chainstay Length (mm):</label
+          >
+          <input
+            type="number"
+            id="multi-chainstay"
+            step="0.1"
+            min="0"
+            class="mt-1 p-2 w-full border rounded-md"
+            placeholder="e.g., 431.8"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            for="multi-chainring"
+            class="block text-sm font-medium text-gray-700"
+            >Largest Chain Wheel Teeth:</label
+          >
+          <input
+            type="number"
+            id="multi-chainring"
+            min="0"
+            class="mt-1 p-2 w-full border rounded-md"
+            placeholder="e.g., 50"
+          />
+        </div>
+        <div class="mb-4">
+          <label
+            for="multi-sprocket"
+            class="block text-sm font-medium text-gray-700"
+            >Largest Sprocket Teeth(Freewheel):</label
+          >
+          <input
+            type="number"
+            id="multi-sprocket"
+            min="0"
+            class="mt-1 p-2 w-full border rounded-md"
+            placeholder="e.g., 32"
+          />
+        </div>
+        <button
+          onclick="calculateMultiSpeed()"
+          class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
+        >
+          Calculate
+        </button>
+        <p id="multi-result" class="mt-4 text-center text-gray-700"></p>
+      </div>
+
+      <!-- Instructions -->
+      <div class="mt-8 text-sm text-gray-600">
+        <p><strong>Instructions:</strong></p>
+        <p>
+          - For single-speed bikes, enter chainstay length (mm), chain Wheel
+          teeth, and sprocket teeth(Freewheel). The result is the number of
+          chain links needed.
+        </p>
+        <p>
+          - For multi-speed bikes, enter chainstay length (mm), largest chain
+          Wheel teeth, and largest sprocket teeth(Freewheel). The result
+          includes 2 extra links for derailleur tension; verify with the
+          "big-big" method.
+        </p>
+        <p>
+          - Chainstay length is the distance from the center of the bottom
+          bracket to the rear axle (in millimeters).
+        </p>
+        <p>
+          - Always test the chain length after installation, adjusting for
+          proper tension (single-speed) or derailleur function (multi-speed).
+        </p>
+      </div>
+
+      <br />
+      <hr />
+      <footer id="footer">
+        Copyright Samantha 2025 © All rights reserved.<br />
+        <p>
+          <a href="mailto:s2880882@gmail.com"
+            >Email: s2880882@gmail.com (Samantha)</a
+          >
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      function calculateSingleSpeed() {
+        const chainstay = parseFloat(
+          document.getElementById("single-chainstay").value
+        );
+        const chainring = parseInt(
+          document.getElementById("single-chainring").value
+        );
+        const sprocket = parseInt(
+          document.getElementById("single-sprocket").value
+        );
+        const resultElement = document.getElementById("single-result");
+
+        if (
+          isNaN(chainstay) ||
+          isNaN(chainring) ||
+          isNaN(sprocket) ||
+          chainstay <= 0 ||
+          chainring <= 0 ||
+          sprocket <= 0
+        ) {
+          resultElement.textContent =
+            "Please enter valid positive numbers for all fields.";
+          return;
+        }
+
+        // Convert chainstay from mm to inches (1 mm = 0.03937 inches), then to links (1 link = 0.5 inches)
+        const chainstayLinks = (chainstay * 0.03937) / 0.5;
+        // Formula: 2 * Chainstay (in links) + (Chainring + Sprocket) / 2
+        const chainLengthLinks = Math.round(
+          2 * chainstayLinks + (chainring + sprocket) / 2
+        );
+        // Convert links to inches (1 link = 0.5 inches)
+        const chainLengthInches = (chainLengthLinks * 0.5).toFixed(2);
+        resultElement.textContent = `Estimated Chain Length: ${chainLengthLinks} links (${chainLengthInches} inches, adjust for 1/4-inch tension)`;
+      }
+
+      function calculateMultiSpeed() {
+        const chainstay = parseFloat(
+          document.getElementById("multi-chainstay").value
+        );
+        const chainring = parseInt(
+          document.getElementById("multi-chainring").value
+        );
+        const sprocket = parseInt(
+          document.getElementById("multi-sprocket").value
+        );
+        const resultElement = document.getElementById("multi-result");
+
+        if (
+          isNaN(chainstay) ||
+          isNaN(chainring) ||
+          isNaN(sprocket) ||
+          chainstay <= 0 ||
+          chainring <= 0 ||
+          sprocket <= 0
+        ) {
+          resultElement.textContent =
+            "Please enter valid positive numbers for all fields.";
+          return;
+        }
+
+        // Convert chainstay from mm to inches (1 mm = 0.03937 inches), then to links (1 link = 0.5 inches)
+        const chainstayLinks = (chainstay * 0.03937) / 0.5;
+        // Formula: 2 * Chainstay (in links) + (Largest Chainring + Largest Sprocket) / 2 + 2 (for derailleur)
+        const chainLengthLinks =
+          Math.round(2 * chainstayLinks + (chainring + sprocket) / 2) + 2;
+        // Convert links to inches (1 link = 0.5 inches)
+        const chainLengthInches = (chainLengthLinks * 0.5).toFixed(2);
+        resultElement.textContent = `Estimated Chain Length: ${chainLengthLinks} links (${chainLengthInches} inches, includes 2 links for derailleur; verify with big-big method)`;
+      }
+    </script>
+  </body>
+</html>
