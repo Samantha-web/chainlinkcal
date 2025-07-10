@@ -1,245 +1,443 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bicycle Chain Length Calculator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      #footer {
-        text-align: center;
-        margin-top: 20px;
-        padding: 10px;
-        background-color: hsl(80, 13%, 95%);
-        border-top: 1px solid #ccc;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bicycle Chain Length Calculator</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#10B981',
+            accent: '#F59E0B'
+          }
+        }
       }
-    </style>
-  </head>
-  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-      <a href="https://samantha-web.github.io/navigationhub/" class="hover:bg-teal-700 transition duration-300 transform group-hover:scale-105"
-        >Back to Home</a>
-      <h1 class="text-2xl font-bold mb-6 text-center">
-        Bicycle Chain Length Calculator
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600&display=swap');
+    
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    
+    .bn {
+      font-family: 'Hind Siliguri', sans-serif;
+    }
+    
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .tab-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .tab-btn.active {
+      background-color: #3B82F6;
+      color: white;
+    }
+    
+    .input-field:focus {
+      border-color: #3B82F6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    
+    .result-box {
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .language-tabs {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .language-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .language-btn.active {
+      background-color: #3B82F6;
+      color: white;
+    }
+    
+    .instructions-content > div {
+      display: none;
+    }
+    
+    .instructions-content > div.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+  <header class="bg-gradient-to-r from-primary to-indigo-600 text-white py-4 px-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl md:text-2xl font-bold flex items-center">
+        <i class="fas fa-bicycle mr-3"></i> Bicycle Chain Length Calculator
       </h1>
+      <a href="https://samantha-web.github.io/navigationhub/" class="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
+        <i class="fas fa-home mr-2"></i> Back to Home
+      </a>
+    </div>
+  </header>
 
-      <!-- Single-Speed Form -->
-      <div class="mb-8">
-        <h2 class="text-lg font-semibold mb-4">Single-Speed Bike</h2>
-        <div class="mb-4">
-          <label
-            for="single-chainstay"
-            class="block text-sm font-medium text-gray-700"
-            >Chainstay Length (mm):</label
-          >
-          <input
-            type="number"
-            id="single-chainstay"
-            step="0.1"
-            min="0"
-            class="mt-1 p-2 w-full border rounded-md"
-            placeholder="e.g., 419.1"
-          />
+  <main class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Single-Speed Card -->
+      <div class="card bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-primary text-white py-3 px-6">
+          <h2 class="text-lg font-bold flex items-center">
+            <i class="fas fa-cog mr-2"></i> Single-Speed Bike
+          </h2>
         </div>
-        <div class="mb-4">
-          <label
-            for="single-chainring"
-            class="block text-sm font-medium text-gray-700"
-            >Chain Wheel Teeth:</label
+        <div class="p-6">
+          <div class="mb-4">
+            <label for="single-chainstay" class="block text-sm font-medium text-gray-700 mb-1">
+              <i class="fas fa-ruler mr-2 text-secondary"></i> Chainstay Length (mm)
+            </label>
+            <input
+              type="number"
+              id="single-chainstay"
+              step="0.1"
+              min="0"
+              class="mt-1 p-3 w-full border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="e.g., 419.1"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="single-chainring" class="block text-sm font-medium text-gray-700 mb-1">
+              <i class="fas fa-teeth-open mr-2 text-secondary"></i> Chain Wheel Teeth
+            </label>
+            <input
+              type="number"
+              id="single-chainring"
+              min="0"
+              class="mt-1 p-3 w-full border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="e.g., 48"
+            />
+          </div>
+          <div class="mb-6">
+            <label for="single-sprocket" class="block text-sm font-medium text-gray-700 mb-1">
+              <i class="fas fa-cog mr-2 text-secondary"></i> Sprocket Teeth (Freewheel)
+            </label>
+            <input
+              type="number"
+              id="single-sprocket"
+              min="0"
+              class="mt-1 p-3 w-full border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="e.g., 16"
+            />
+          </div>
+          <button
+            onclick="calculateSingleSpeed()"
+            class="w-full bg-gradient-to-r from-secondary to-emerald-600 text-white p-3 rounded-lg font-semibold hover:opacity-90 transition duration-300"
           >
-          <input
-            type="number"
-            id="single-chainring"
-            min="0"
-            class="mt-1 p-2 w-full border rounded-md"
-            placeholder="e.g., 48"
-          />
+            <i class="fas fa-calculator mr-2"></i> Calculate
+          </button>
+          <div id="single-result" class="mt-4 p-4 bg-blue-50 rounded-lg result-box hidden">
+            <h3 class="font-bold text-primary mb-2">Result:</h3>
+            <p class="text-gray-700"></p>
+          </div>
         </div>
-        <div class="mb-4">
-          <label
-            for="single-sprocket"
-            class="block text-sm font-medium text-gray-700"
-            >Sprocket Teeth(Freewheel):</label
-          >
-          <input
-            type="number"
-            id="single-sprocket"
-            min="0"
-            class="mt-1 p-2 w-full border rounded-md"
-            placeholder="e.g., 16"
-          />
-        </div>
-        <button
-          onclick="calculateSingleSpeed()"
-          class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
-        >
-          Calculate
-        </button>
-        <p id="single-result" class="mt-4 text-center text-gray-700"></p>
       </div>
 
-      <!-- Multi-Speed Form -->
-      <div>
-        <h2 class="text-lg font-semibold mb-4">Multi-Speed Bike</h2>
-        <div class="mb-4">
-          <label
-            for="multi-chainstay"
-            class="block text-sm font-medium text-gray-700"
-            >Chainstay Length (mm):</label
-          >
-          <input
-            type="number"
-            id="multi-chainstay"
-            step="0.1"
-            min="0"
-            class="mt-1 p-2 w-full border rounded-md"
-            placeholder="e.g., 431.8"
-          />
+      <!-- Multi-Speed Card -->
+      <div class="card bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-secondary text-white py-3 px-6">
+          <h2 class="text-lg font-bold flex items-center">
+            <i class="fas fa-cogs mr-2"></i> Multi-Speed Bike
+          </h2>
         </div>
-        <div class="mb-4">
-          <label
-            for="multi-chainring"
-            class="block text-sm font-medium text-gray-700"
-            >Largest Chain Wheel Teeth:</label
+        <div class="p-6">
+          <div class="mb-4">
+            <label for="multi-chainstay" class="block text-sm font-medium text-gray-700 mb-1">
+              <i class="fas fa-ruler mr-2 text-primary"></i> Chainstay Length (mm)
+            </label>
+            <input
+              type="number"
+              id="multi-chainstay"
+              step="0.1"
+              min="0"
+              class="mt-1 p-3 w-full border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="e.g., 431.8"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="multi-chainring" class="block text-sm font-medium text-gray-700 mb-1">
+              <i class="fas fa-teeth mr-2 text-primary"></i> Largest Chain Wheel Teeth
+            </label>
+            <input
+              type="number"
+              id="multi-chainring"
+              min="0"
+              class="mt-1 p-3 w-full border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="e.g., 50"
+            />
+          </div>
+          <div class="mb-6">
+            <label for="multi-sprocket" class="block text-sm font-medium text-gray-700 mb-1">
+              <i class="fas fa-cogs mr-2 text-primary"></i> Largest Sprocket Teeth (Freewheel)
+            </label>
+            <input
+              type="number"
+              id="multi-sprocket"
+              min="0"
+              class="mt-1 p-3 w-full border border-gray-300 rounded-lg input-field focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="e.g., 32"
+            />
+          </div>
+          <button
+            onclick="calculateMultiSpeed()"
+            class="w-full bg-gradient-to-r from-primary to-blue-700 text-white p-3 rounded-lg font-semibold hover:opacity-90 transition duration-300"
           >
-          <input
-            type="number"
-            id="multi-chainring"
-            min="0"
-            class="mt-1 p-2 w-full border rounded-md"
-            placeholder="e.g., 50"
-          />
+            <i class="fas fa-calculator mr-2"></i> Calculate
+          </button>
+          <div id="multi-result" class="mt-4 p-4 bg-blue-50 rounded-lg result-box hidden">
+            <h3 class="font-bold text-primary mb-2">Result:</h3>
+            <p class="text-gray-700"></p>
+          </div>
         </div>
-        <div class="mb-4">
-          <label
-            for="multi-sprocket"
-            class="block text-sm font-medium text-gray-700"
-            >Largest Sprocket Teeth(Freewheel):</label
-          >
-          <input
-            type="number"
-            id="multi-sprocket"
-            min="0"
-            class="mt-1 p-2 w-full border rounded-md"
-            placeholder="e.g., 32"
-          />
-        </div>
-        <button
-          onclick="calculateMultiSpeed()"
-          class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
-        >
-          Calculate
-        </button>
-        <p id="multi-result" class="mt-4 text-center text-gray-700"></p>
       </div>
-
-      <!-- Instructions -->
-      <div class="mt-8 text-sm text-gray-600">
-        <p><strong>Instructions:</strong></p>
-        <p>
-          - For single-speed bikes, enter chainstay length (mm), chain Wheel
-          teeth, and sprocket teeth(Freewheel). The result is the number of
-          chain links needed.
-        </p>
-        <p>
-          - For multi-speed bikes, enter chainstay length (mm), largest chain
-          Wheel teeth, and largest sprocket teeth(Freewheel). The result
-          includes 2 extra links for derailleur tension; verify with the
-          "big-big" method.
-        </p>
-        <p>
-          - Chainstay length is the distance from the center of the bottom
-          bracket to the rear axle (in millimeters).
-        </p>
-        <p>
-          - Always test the chain length after installation, adjusting for
-          proper tension (single-speed) or derailleur function (multi-speed).
-        </p>
-      </div>
-
-      <br />
-      <hr />
-      <footer id="footer">
-        Copyright Samantha 2025 © All rights reserved.<br />
-        <p>
-          <a href="mailto:s2880882@gmail.com"
-            >Email: s2880882@gmail.com (Samantha)</a
-          >
-        </p>
-      </footer>
     </div>
 
-    <script>
-      function calculateSingleSpeed() {
-        const chainstay = parseFloat(
-          document.getElementById("single-chainstay").value
-        );
-        const chainring = parseInt(
-          document.getElementById("single-chainring").value
-        );
-        const sprocket = parseInt(
-          document.getElementById("single-sprocket").value
-        );
-        const resultElement = document.getElementById("single-result");
+    <!-- How to Use Section -->
+    <div class="mt-10 bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="bg-gradient-to-r from-accent to-amber-500 text-white py-3 px-6">
+        <h2 class="text-lg font-bold flex items-center">
+          <i class="fas fa-info-circle mr-2"></i> How to Use
+        </h2>
+      </div>
+      <div class="p-4 border-b">
+        <div class="language-tabs flex bg-gray-200 rounded-lg mb-4">
+          <div class="language-btn active" onclick="showLanguage('en')">
+            <i class="fas fa-language mr-2"></i> English
+          </div>
+          <div class="language-btn" onclick="showLanguage('bn')">
+            <i class="fas fa-language mr-2"></i> বাংলা
+          </div>
+        </div>
+      </div>
+      
+      <div class="instructions-content p-6">
+        <!-- English Instructions -->
+        <div id="instructions-en" class="active">
+          <div class="mb-6">
+            <h3 class="font-bold text-lg text-primary mb-3 flex items-center">
+              <i class="fas fa-bicycle mr-2"></i> For Single-Speed Bikes
+            </h3>
+            <ul class="list-disc pl-5 space-y-2 text-gray-700">
+              <li>Measure chainstay length in millimeters (distance from center of bottom bracket to rear axle)</li>
+              <li>Count teeth on your chain wheel (front)</li>
+              <li>Count teeth on your sprocket (rear)</li>
+              <li>Enter all values in the Single-Speed Bike form</li>
+              <li>Click "Calculate" to get chain length in links</li>
+            </ul>
+          </div>
+          
+          <div class="mb-6">
+            <h3 class="font-bold text-lg text-secondary mb-3 flex items-center">
+              <i class="fas fa-biking mr-2"></i> For Multi-Speed Bikes
+            </h3>
+            <ul class="list-disc pl-5 space-y-2 text-gray-700">
+              <li>Measure chainstay length in millimeters</li>
+              <li>Count teeth on your largest chain wheel (front)</li>
+              <li>Count teeth on your largest sprocket (rear)</li>
+              <li>Enter all values in the Multi-Speed Bike form</li>
+              <li>Calculator adds 2 extra links for derailleur tension</li>
+              <li>Always verify with "big-big" method after installation</li>
+            </ul>
+          </div>
+          
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <h3 class="font-bold text-accent mb-2 flex items-center">
+              <i class="fas fa-lightbulb mr-2"></i> Important Notes
+            </h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+              <li>Chainstay length should be measured precisely</li>
+              <li>For single-speed bikes, leave 1/4-inch slack for tension</li>
+              <li>For multi-speed bikes, the chain should not be too tight when on largest chainring and largest sprocket</li>
+              <li>Always test chain length after installation</li>
+              <li>When in doubt, consult a professional bike mechanic</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Bangla Instructions -->
+        <div id="instructions-bn" class="bn">
+          <div class="mb-6">
+            <h3 class="font-bold text-lg text-primary mb-3 flex items-center">
+              <i class="fas fa-bicycle mr-2"></i> সিঙ্গল-স্পিড বাইকের জন্য
+            </h3>
+            <ul class="list-disc pl-5 space-y-2 text-gray-700">
+              <li>চেইনস্টে দৈর্ঘ্য মিলিমিটারে পরিমাপ করুন (বটম ব্র্যাকেটের কেন্দ্র থেকে রিয়ার এক্সেল পর্যন্ত দূরত্ব)</li>
+              <li>আপনার চেইন হুইলের (সামনের) দাঁতের সংখ্যা গণনা করুন</li>
+              <li>আপনার স্প্রকেটের (পিছনের) দাঁতের সংখ্যা গণনা করুন</li>
+              <li>সিঙ্গল-স্পিড বাইক ফর্মে সমস্ত মান লিখুন</li>
+              <li>চেইনের দৈর্ঘ্য লিঙ্কে পেতে "ক্যালকুলেট" বাটনে ক্লিক করুন</li>
+            </ul>
+          </div>
+          
+          <div class="mb-6">
+            <h3 class="font-bold text-lg text-secondary mb-3 flex items-center">
+              <i class="fas fa-biking mr-2"></i> মাল্টি-স্পিড বাইকের জন্য
+            </h3>
+            <ul class="list-disc pl-5 space-y-2 text-gray-700">
+              <li>চেইনস্টে দৈর্ঘ্য মিলিমিটারে পরিমাপ করুন</li>
+              <li>আপনার বৃহত্তম চেইন হুইলের (সামনের) দাঁতের সংখ্যা গণনা করুন</li>
+              <li>আপনার বৃহত্তম স্প্রকেটের (পিছনের) দাঁতের সংখ্যা গণনা করুন</li>
+              <li>মাল্টি-স্পিড বাইক ফর্মে সমস্ত মান লিখুন</li>
+              <li>ক্যালকুলেটর ডেরেইলার টেনশনের জন্য অতিরিক্ত ২টি লিঙ্ক যোগ করে</li>
+              <li>ইনস্টলেশনের পরে সর্বদা "বিগ-বিগ" পদ্ধতি দিয়ে যাচাই করুন</li>
+            </ul>
+          </div>
+          
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <h3 class="font-bold text-accent mb-2 flex items-center">
+              <i class="fas fa-lightbulb mr-2"></i> গুরুত্বপূর্ণ নোট
+            </h3>
+            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+              <li>চেইনস্টে দৈর্ঘ্য সঠিকভাবে পরিমাপ করা উচিত</li>
+              <li>সিঙ্গল-স্পিড বাইকের জন্য টেনশনের জন্য ১/৪-ইঞ্চি স্ল্যাক রাখুন</li>
+              <li>মাল্টি-স্পিড বাইকের জন্য, চেইন খুব টাইট হওয়া উচিত নয় যখন সবচেয়ে বড় চেইনরিং এবং সবচেয়ে বড় স্প্রকেটে থাকে</li>
+              <li>ইনস্টলেশনের পরে সর্বদা চেইনের দৈর্ঘ্য পরীক্ষা করুন</li>
+              <li>সন্দেহ হলে একজন পেশাদার বাইক মেকানিকের সাথে পরামর্শ করুন</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
-        if (
-          isNaN(chainstay) ||
-          isNaN(chainring) ||
-          isNaN(sprocket) ||
-          chainstay <= 0 ||
-          chainring <= 0 ||
-          sprocket <= 0
-        ) {
-          resultElement.textContent =
-            "Please enter valid positive numbers for all fields.";
-          return;
-        }
+  <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-6 px-4">
+    <div class="container mx-auto text-center">
+      <div class="flex justify-center space-x-6 mb-4">
+        <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+          <i class="fab fa-facebook-f text-xl"></i>
+        </a>
+        <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+          <i class="fab fa-twitter text-xl"></i>
+        </a>
+        <a href="#" class="text-gray-300 hover:text-white transition duration-300">
+          <i class="fab fa-instagram text-xl"></i>
+        </a>
+        <a href="mailto:s2880882@gmail.com" class="text-gray-300 hover:text-white transition duration-300">
+          <i class="fas fa-envelope text-xl"></i>
+        </a>
+      </div>
+      <p class="text-gray-300">Copyright Samantha 2025 © All rights reserved.</p>
+      <p class="text-gray-400 mt-1">
+        <a href="mailto:s2880882@gmail.com" class="hover:text-white transition duration-300">
+          <i class="fas fa-envelope mr-1"></i> s2880882@gmail.com (Samantha)
+        </a>
+      </p>
+    </div>
+  </footer>
 
-        // Convert chainstay from mm to inches (1 mm = 0.03937 inches), then to links (1 link = 0.5 inches)
-        const chainstayLinks = (chainstay * 0.03937) / 0.5;
-        // Formula: 2 * Chainstay (in links) + (Chainring + Sprocket) / 2
-        const chainLengthLinks = Math.round(
-          2 * chainstayLinks + (chainring + sprocket) / 2
-        );
-        // Convert links to inches (1 link = 0.5 inches)
-        const chainLengthInches = (chainLengthLinks * 0.5).toFixed(2);
-        resultElement.textContent = `Estimated Chain Length: ${chainLengthLinks} links (${chainLengthInches} inches, adjust for 1/4-inch tension)`;
+  <script>
+    function calculateSingleSpeed() {
+      const chainstay = parseFloat(document.getElementById("single-chainstay").value);
+      const chainring = parseInt(document.getElementById("single-chainring").value);
+      const sprocket = parseInt(document.getElementById("single-sprocket").value);
+      const resultElement = document.getElementById("single-result");
+      const resultText = resultElement.querySelector('p');
+      
+      if (isNaN(chainstay) || isNaN(chainring) || isNaN(sprocket) || 
+          chainstay <= 0 || chainring <= 0 || sprocket <= 0) {
+        resultText.textContent = "Please enter valid positive numbers for all fields.";
+        resultElement.classList.remove('hidden');
+        return;
       }
-
-      function calculateMultiSpeed() {
-        const chainstay = parseFloat(
-          document.getElementById("multi-chainstay").value
-        );
-        const chainring = parseInt(
-          document.getElementById("multi-chainring").value
-        );
-        const sprocket = parseInt(
-          document.getElementById("multi-sprocket").value
-        );
-        const resultElement = document.getElementById("multi-result");
-
-        if (
-          isNaN(chainstay) ||
-          isNaN(chainring) ||
-          isNaN(sprocket) ||
-          chainstay <= 0 ||
-          chainring <= 0 ||
-          sprocket <= 0
-        ) {
-          resultElement.textContent =
-            "Please enter valid positive numbers for all fields.";
-          return;
-        }
-
-        // Convert chainstay from mm to inches (1 mm = 0.03937 inches), then to links (1 link = 0.5 inches)
-        const chainstayLinks = (chainstay * 0.03937) / 0.5;
-        // Formula: 2 * Chainstay (in links) + (Largest Chainring + Largest Sprocket) / 2 + 2 (for derailleur)
-        const chainLengthLinks =
-          Math.round(2 * chainstayLinks + (chainring + sprocket) / 2) + 2;
-        // Convert links to inches (1 link = 0.5 inches)
-        const chainLengthInches = (chainLengthLinks * 0.5).toFixed(2);
-        resultElement.textContent = `Estimated Chain Length: ${chainLengthLinks} links (${chainLengthInches} inches, includes 2 links for derailleur; verify with big-big method)`;
+      
+      // Convert chainstay from mm to inches (1 mm = 0.03937 inches), then to links (1 link = 0.5 inches)
+      const chainstayLinks = (chainstay * 0.03937) / 0.5;
+      // Formula: 2 * Chainstay (in links) + (Chainring + Sprocket) / 2
+      const chainLengthLinks = Math.round(2 * chainstayLinks + (chainring + sprocket) / 2);
+      // Convert links to inches (1 link = 0.5 inches)
+      const chainLengthInches = (chainLengthLinks * 0.5).toFixed(2);
+      
+      resultText.innerHTML = `Estimated Chain Length: <span class="font-bold text-primary">${chainLengthLinks} links</span> (${chainLengthInches} inches)<br>
+                             <span class="text-sm text-gray-600">Adjust for 1/4-inch tension during installation</span>`;
+      resultElement.classList.remove('hidden');
+    }
+    
+    function calculateMultiSpeed() {
+      const chainstay = parseFloat(document.getElementById("multi-chainstay").value);
+      const chainring = parseInt(document.getElementById("multi-chainring").value);
+      const sprocket = parseInt(document.getElementById("multi-sprocket").value);
+      const resultElement = document.getElementById("multi-result");
+      const resultText = resultElement.querySelector('p');
+      
+      if (isNaN(chainstay) || isNaN(chainring) || isNaN(sprocket) || 
+          chainstay <= 0 || chainring <= 0 || sprocket <= 0) {
+        resultText.textContent = "Please enter valid positive numbers for all fields.";
+        resultElement.classList.remove('hidden');
+        return;
       }
-    </script>
-  </body>
+      
+      // Convert chainstay from mm to inches (1 mm = 0.03937 inches), then to links (1 link = 0.5 inches)
+      const chainstayLinks = (chainstay * 0.03937) / 0.5;
+      // Formula: 2 * Chainstay (in links) + (Largest Chainring + Largest Sprocket) / 2 + 2 (for derailleur)
+      const chainLengthLinks = Math.round(2 * chainstayLinks + (chainring + sprocket) / 2) + 2;
+      // Convert links to inches (1 link = 0.5 inches)
+      const chainLengthInches = (chainLengthLinks * 0.5).toFixed(2);
+      
+      resultText.innerHTML = `Estimated Chain Length: <span class="font-bold text-secondary">${chainLengthLinks} links</span> (${chainLengthInches} inches)<br>
+                             <span class="text-sm text-gray-600">Includes 2 links for derailleur tension - verify with big-big method</span>`;
+      resultElement.classList.remove('hidden');
+    }
+    
+    function showLanguage(lang) {
+      // Hide all language instructions
+      document.querySelectorAll('.instructions-content > div').forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      // Show selected language
+      document.getElementById(`instructions-${lang}`).classList.add('active');
+      
+      // Update active tab
+      document.querySelectorAll('.language-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Set the clicked button as active
+      if (lang === 'en') {
+        document.querySelectorAll('.language-btn')[0].classList.add('active');
+      } else {
+        document.querySelectorAll('.language-btn')[1].classList.add('active');
+      }
+    }
+    
+    // Initialize the calculator
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up event listeners for better mobile UX
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', function() {
+          this.scrollIntoView({behavior: 'smooth', block: 'center'});
+        });
+      });
+    });
+  </script>
+</body>
 </html>
